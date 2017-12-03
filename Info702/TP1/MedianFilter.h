@@ -7,20 +7,21 @@
 
 
 #include "GrayLevelImage2D.h"
+#include "Image2D.h"
 
 class MedianFilter {
 public:
 
     MedianFilter();
-    MedianFilter(GrayLevelImage2D img, int mask_size);
+    MedianFilter(Image2D<unsigned char> img, int mask_size);
 
-    GrayLevelImage2D apply();
+    Image2D<unsigned char> apply();
 private:
     void build_mask(int x, int y);
-    GrayLevel get_median();
+    unsigned char get_median();
 
-    GrayLevelImage2D m_img;
-    std::vector<GrayLevel> m_mask;
+    Image2D<unsigned char> m_img;
+    std::vector<unsigned char> m_mask;
     int m_mask_size;
 };
 

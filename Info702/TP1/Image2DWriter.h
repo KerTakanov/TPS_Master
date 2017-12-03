@@ -29,10 +29,14 @@ public:
     typedef Image2D<Value> Image;
     static bool write( Image & img, std::ostream & output, bool ascii )
     {
-        output << "P5\n" << img.w() << " " << img.h() << std::endl << "255\n";
+        output << (ascii ? "P2\n" : "P5\n") << img.w() << " " << img.h() << std::endl << "255\n";
         output << std::noskipws;
         for (unsigned char val: img) {
-            output << val;
+            if (ascii) {
+                output << (int) val <<  ' ';
+            }
+            else
+                output << val;
         }
     }
 };

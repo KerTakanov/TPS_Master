@@ -8,12 +8,26 @@
 #include "InvertRedBlueFilter.h"
 #include "Accessor.h"
 #include "save-channel.h"
+#include "MedianFilter.h"
+#include "Histogramme.h"
 
 int testImage2D()
 {
-    std::ifstream input("imgs/lena-imp-0_1.pgm", std::ios_base::binary);
+    std::ifstream input("imgs/church.pgm", std::ios_base::binary);
     Image2D<unsigned char> img;
     Image2DReader<unsigned char>::read(img, input);
+
+    Histogramme h(img);
+    h.init();
+    //h.egalise();
+
+    std::ofstream output( "colors.pgm", std::ios_base::binary);
+    Image2DWriter<unsigned char>::write(img, output, false);
+    /*MedianFilter mf(img, 15);
+    img = mf.apply();
+
+    std::ofstream output( "colors.pgm", std::ios_base::binary);
+    Image2DWriter<unsigned char>::write(img, output, true);
     /*Image2D<Color> img;
     if (!Image2DReader<Color>::read(img, input)) {
         return 0;

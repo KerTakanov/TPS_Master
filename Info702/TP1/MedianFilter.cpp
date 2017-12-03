@@ -9,7 +9,7 @@ MedianFilter::MedianFilter() {
 
 }
 
-MedianFilter::MedianFilter(GrayLevelImage2D img, int mask_size) :
+MedianFilter::MedianFilter(Image2D<unsigned char> img, int mask_size) :
     m_img(img),
     m_mask_size(mask_size)
 {
@@ -17,28 +17,27 @@ MedianFilter::MedianFilter(GrayLevelImage2D img, int mask_size) :
 }
 
 void MedianFilter::build_mask(int x, int y) {
-    m_mask = std::vector<GrayLevel>((unsigned)(m_mask_size * 2 + 1));
-
-    for (int i = x - m_mask_size; i < x + m_mask_size; ++i) {
-        for (int j = y - m_mask_size; j < y + m_mask_size; ++j) {
+    m_mask = std::vector<unsigned char>((unsigned)(m_mask_size * 2 + 1));
+    for (int i = x - m_mask_size; i <= x + m_mask_size; ++i) {
+        for (int j = y - m_mask_size; j <= y + m_mask_size; ++j) {
             if (i >= 0 && j >= 0 && i < m_img.h() && j < m_img.w())
-                m_mask.push_back(m_img.at(i, j));
+                m_mask.push_back((unsigned char) m_img.at(i, j));
         }
     }
     std::sort(m_mask.begin(), m_mask.end());
 }
 
-GrayLevel MedianFilter::get_median() {
+unsigned char MedianFilter::get_median() {
     return m_mask[(m_mask.size() + 1) / 2];
 }
 
-GrayLevelImage2D MedianFilter::apply() {
-    GrayLevelImage2D w_img(m_img.w(), m_img.h());
+Image2D<unsigned char> MedianFilter::apply() {
+    Image2D<unsigned char> w_img(m_img.w(), m_img.h());
     int i = 0;
     for (int x = 0; x < m_img.h(); ++x) {
         for (int y = 0; y < m_img.w(); ++y) {
             build_mask(x, y);
-            w_img.set(x, y, get_median());
+            w_img.at(x, y) = get_median();
             ++i;
         }
     }
