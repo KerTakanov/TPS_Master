@@ -67,6 +67,7 @@ bool GrayLevelImage2D::importPGM(std::istream &input) {
     std::cout << "type = " << type << std::endl;
     input >> m_width >> m_height;
     int max_size;
+
     input >> max_size;
 
     std::cout << m_width << ' ' << m_height << ' ' << max_size << std::endl;
