@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 #include "Color.h"
 #include "Image2DWriter.h"
@@ -6,7 +6,22 @@
 #include "Image2DReader.h"
 #include "save-channel.h"
 
-int save_channel(Image2D<Color>& img)  {
+int main(int argc, char* argv[])  {
+    if (argc < 1) {
+        std::cout << "Vous devez spécifier un fichier en entrée" << std::endl;
+        return -1;
+    }
+    std::string input_path = argv[1];
+    std::ifstream input(input_path, std::ios::binary);
+
+    if (!input) {
+        std::cerr << "Erreur lors de la lecture du fichier input" << std::endl;
+        return -1;
+    }
+
+    Image2D<Color> img;
+    Image2DReader<Color>::read(img, input);
+
     typedef Image2D<unsigned char> GrayLevelImage2D;
     typedef Image2DWriter<unsigned char> GrayLevelImage2DWriter;
     typedef GrayLevelImage2D::Iterator GrayLevelIterator;
@@ -22,9 +37,9 @@ int save_channel(Image2D<Color>& img)  {
     // vvvvvvvvv Toute la transformation couleur -> canal vert est ici vvvvvvvvvvvv
     //
     // Servira à parcourir la composante verte de l'image couleur.
-    typedef ColorImage2D::GenericConstIterator< ColorGreenAccessor > ColorGreenConstIterator;
-    typedef ColorImage2D::GenericConstIterator< ColorRedAccessor > ColorRedConstIterator;
-    typedef ColorImage2D::GenericConstIterator< ColorBlueAccessor > ColorBlueConstIterator;
+    typedef ColorImage2D::GenericIterator< ColorGreenAccessor > ColorGreenConstIterator;
+    typedef ColorImage2D::GenericIterator< ColorRedAccessor > ColorRedConstIterator;
+    typedef ColorImage2D::GenericIterator< ColorBlueAccessor > ColorBlueConstIterator;
 
     // Notez comment on appelle la méthode \b générique `begin` de `Image2D`.
     ColorGreenConstIterator itGreen = img.begin< ColorGreenAccessor >();

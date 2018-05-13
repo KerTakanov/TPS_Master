@@ -43,3 +43,5 @@ if __name__ == "__main__":
     print(g.nodes)
     print("--------")
     print(g.edge)
+    print(g.check_strat.check())
+    print(g.get_strat.get())
